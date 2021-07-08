@@ -1,0 +1,78 @@
+Q.1 What is a workstation? 
+
+Workstations are personal computers or virtual servers where the configuration code is created tested or changed.
+workstation communucate with the server using knife(command line tool).Knife is a command line tool that uploads the cookbook to the server.
+Chef Workstation gives you everything you need to get started with Chef - ad hoc remote execution, remote scanning, configuration tasks, cookbook creation tools as well as robust dependency and testing software - all in one easy-to-install package.
+Devops engineer sits here and writes codes. This code is called recipes, and a collection of recipes are  called cookbooks.
+
+Q.2 What is a node?
+
+Nodes are the system that require the configuration.Ohai fetches the current state of the node it is located in. It has the current cofiguration of the machine.
+Node communicate with the chef-server using the chef-client. Each node can have different configuration required.
+chef client is installed on every node.
+
+Q.3 What is Chef Server?
+
+The chef-server is a middle man between the workstation and the nodes.All cookbooks are stored here.
+Server may be hosted locally or remote.
+The Chef Infra Server acts as a hub for configuration data.
+ The Chef Infra Server stores cookbooks, the policies that are applied to nodes, 
+and metadata that describes each registered node that is managed by the Chef Infra Client.
+
+
+Q.4 How to bootstrap a node? What does exactly bootstrapping a node means?
+
+A node is any physical, virtual, or cloud device that is configured and maintained by an instance of Chef Infra Client.
+Bootstrapping installs Chef Infra Client on a target system so that it can run as a client and sets the node up to communicate with a Chef Infra Server. There are two ways to do this:
+
+1.Run the knife bootstrap command from a workstation.
+2.Perform an unattended install to bootstrap from the node itself, without requiring SSH or WinRM connectivity.
+
+
+Stages for bootstraping a node
+1.knife bootstrap 
+Enter the knife bootstrap subcommand from a workstation. Include the hostname, IP address, or FQDN of the target node as part of this command. Knife will establish an SSH or WinRM connection with the target system and run a bootstrap script.
+2.Get the install script from Chef2.
+The shell script will make a request to the Chef website to get the most recent version of a the Chef Infra Client install script(install.sh or install.ps1).
+3.Get the Chef Infra Client package from Chef
+The install script then gathers system-specific information and determines the correct package for Chef Infra Client, and then downloads the appropriate package from omnitruck-direct.chef.io.
+4.Install Chef Infra Client
+Chef Infra Client is installed on the target node using a system native package (.rpm, .msi, etc).
+5.Start a Chef Infra Client run
+On Microsoft Windows machines: The batch file that is derived from the windows-chef-client-msi.erb bootstrap template executes the chef-client binary with a set of initial settings stored within first-boot.json on the node. 
+first-boot.json is generated from the workstation as part of the initial knife bootstrap subcommand.
+6.Complete a Chef Infra Client run
+The first Chef Infra Client run, by default, contains an empty run-list. A run-list can be specified as part of the initial bootstrap operation using the --run-list option as part of the knife bootstrap subcommand.
+
+
+Q.5 What is the use of running Chef-Client periodically?
+
+A chef-client is an agent that runs locally on every node that is under management by Chef. 
+When a chef-client is run, it will perform all of the steps that are required to bring the node 
+into the expected state, including: Registering and authenticating the node with the Chef server.
+
+While you can run the Chef client on your nodes manually whenever you change something in your Chef repository, it's sometimes preferable to have the Chef client run automatically every so often. Letting the Chef client run automatically makes sure that no box misses out any updates.
+
+Q.6 What is a Cookbook?
+
+A cookbook is the fundamental unit of configuration and policy distribution. A cookbook defines a scenario and contains everything that is required to support that scenario:
+Recipes that specify the resources to use and the order in which they are to be applied
+Attribute values
+File distributions
+Templates
+Extensions to Chef, such as custom resources and libraries
+
+
+Q.7 How to upload a cookbook on Chef Server? .
+Use the knife upload subcommand to upload data to the Chef Infra Server from the current working directory in the chef-repo
+knife upload cookbooks   //Upload the /cookbooks directory
+
+knife upload . //Upload the entire chef-repo
+To upload a single cookbook, use the following syntax:
+
+knife cookbook upload [cookbook-name]
+
+
+Q.8 How to update a cookbook which is uploaded on Chef Server?
+
+when you run knife cookbook upload it will update whatever version is listed in your local metadata.rb file. 
